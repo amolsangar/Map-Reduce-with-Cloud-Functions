@@ -7,6 +7,9 @@ A simple text-search engine is implemented by computing an inverted index of a l
 # Data Source
 - Files from Project Gutenberg
 
+# Demo
+   https://user-images.githubusercontent.com/41895348/143496620-a1f058a9-9152-49b5-85de-81d315d5267c.mp4
+
 # How to run
 1. Run deployment script 
 
@@ -128,4 +131,4 @@ Run trigger URL for the "master" cloud function with the mentioned query paramet
 
   <img src="images/search_results.jpg">
     
-    
+
