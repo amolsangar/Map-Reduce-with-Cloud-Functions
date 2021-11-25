@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        
+        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+        <style>
+            #container > a {
+                /* line-height: 0.1em; */
+                display: inline-block;
+                text-decoration: none;
+                padding: 2px;
+                margin: 10px;
+            }
+
+            body,html{
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                /* background: #e74c3c !important; */
+            }
+
+            .searchbar{
+                margin-bottom: auto;
+                margin-top: 20%;
+                height: 60px;
+                background-color: #353b48;
+                border-radius: 20px;
+                padding: 10px;
+            }
+
+            .search_input{
+                color: white;
+                border: 0;
+                outline: 0;
+                background: none;
+                padding: 0 10px;
+                width: 400px;
+                caret-color:transparent;
+                line-height: 40px;
+                transition: width 0.4s linear;
+            }
+
+            .searchbar:hover > .search_input{
+                padding: 0 10px;
+                width: 450px;
+                caret-color:red;
+                transition: width 0.4s linear;
+            }
+
+            .searchbar:hover > .search_icon{
+                background: white;
+                color: #e74c3c;
+            }
+
+            .search_icon{
+                height: 40px;
+                width: 40px;
+                float: right;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                color:white;
+                text-decoration:none;
+            }
+            
+            h2 {
+                text-align: center;
+            }
+
+            .loader {
+                margin-top: 10px;
+                margin-left: -20px;
+                border: 5px solid #f3f3f3; /* Light grey */
+                border-top: 5px solid #3498db; /* Blue */
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .center {
+                position: relative;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                padding: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container h-100">
+            <!-- <h2><span class="label label-default">Search</span></h2> -->
+            <div class="d-flex justify-content-center h-100">
+                <div class="searchbar">
+                    <input class="search_input" type="text" id="q" name="q" placeholder="Search...">
+                    <a href="#" class="search_icon" id="searchBtn" onclick="searchWords(); return false;"><i class="fas fa-search"></i></a>
+                    <div id="loader" class="loader center"></div>
+                </div>
+            </div>
+            <div id="container" tabindex="0"></div>
+        </div>
+
+        <script>
+            var searchURL = "https://us-central1-fa21-engr-e516-asangar.cloudfunctions.net";
+
+            document.getElementById("loader").style.display = "none"
+
+            window.onload = function() {
+                document.getElementById("q").focus();
+            };
+
+            function searchWords() {
+                var query = document.getElementById('q').value
+                document.getElementById("q").readOnly = true
+                var cont = document.getElementById("container")
+                var text = "Search results for " + query + ":"
+                
+                query = query.replace(/ /g, "%20")
+
+                // var results = {"120.txt":[{"title":"The Project Gutenberg eBook of Treasure Island, by Robert Louis Stevenson","link":"https://www.gutenberg.org/files/120/120-h/120-h.htm"}],"100.txt":[{"title":"The Project Gutenberg eBook of The Complete Works of William Shakespeare, by William Shakespeare","link":"https://www.gutenberg.org/files/100/100-h/100-h.htm"}],"128.txt":[{"title":"The Project Gutenberg E-text of The Arabian Nights Entertainments, by Andrew Lang","link":"https://www.gutenberg.org/files/128/128-h/128-h.htm"}],"135.txt":[{"title":"The Project Gutenberg eBook of Les MisÃ©rables, by Victor Hugo","link":"https://www.gutenberg.org/files/135/135-h/135-h.htm"}],"103.txt":[{"title":"The Project Gutenberg eBook of Around the World in Eighty Days, by Jules Verne","link":"https://www.gutenberg.org/files/103/103-h/103-h.htm"}],"123.txt":[{"title":"The Project Gutenberg E-text of At the Earth's Core, by Edgar Rice Burroughs","link":"https://www.gutenberg.org/files/123/123-h/123-h.htm"}],"124.txt":[{"title":"The Project Gutenberg eBook of Deuterocanonical Books of the Bible","link":"https://www.gutenberg.org/files/124/124-h/124-h.htm"}],"142.txt":[{"title":"The $30,000 Bequest, by Mark Twain","link":"https://www.gutenberg.org/files/142/142-h/142-h.htm"}],"125.txt":[{"title":"A Girl of the Limberlost, by Gene Stratton Porter","link":"https://www.gutenberg.org/files/125/125-h/125-h.htm"}],"144.txt":[{"title":"The Project Gutenberg eBook of The Voyage Out, by Virginia Woolf","link":"https://www.gutenberg.org/files/144/144-h/144-h.htm"}],"141.txt":[{"title":"The Project Gutenberg eBook of Mansfield Park, by Jane Austen","link":"https://www.gutenberg.org/files/141/141-h/141-h.htm"}],"102.txt":[{"title":"The Tragedy of Pudd’nhead Wilson by Mark Twain","link":"https://www.gutenberg.org/files/102/102-h/102-h.htm"}],"132.txt":[{"title":"The Project Gutenberg eBook of The Art of War, by Sun Tzu","link":"https://www.gutenberg.org/files/132/132-h/132-h.htm"}],"130.txt":[{"title":"The Project Gutenberg E-text of The Arabian Nights Entertainments, by Andrew Lang","link":"https://www.gutenberg.org/files/130/130-h/130-h.htm"}],"131.txt":[{"title":"The Project Gutenberg eBook of The Pilgrim's Progress, by John Bunyan","link":"https://www.gutenberg.org/files/131/131-h/131-h.htm"}],"119.txt":[{"title":"A TRAMP ABROAD, BY MARK TWAIN, COMPLETE","link":"https://www.gutenberg.org/files/119/119-h/119-h.htm"}],"101.txt":[{"title":"The Project Gutenberg Copyrighted E-text of The Hacker Crackdown, by Bruce Sterling","link":"https://www.gutenberg.org/files/101/101-h/101-h.htm"}],"108.txt":[{"title":"The Return of Sherlock Holmes, by Sir Arthur Conan Doyle","link":"https://www.gutenberg.org/files/108/108-h/108-h.htm"}],"111.txt":[{"title":"Freckles, by Gene Stratton-Porter","link":"https://www.gutenberg.org/files/111/111-h/111-h.htm"}],"110.txt":[{"title":"The Project Gutenberg eBook of Tess of the d’Urbervilles, by Thomas Hardy","link":"https://www.gutenberg.org/files/110/110-h/110-h.htm"}],"138.txt":[{"title":"George Sand, by Rene Doumic","link":"https://www.gutenberg.org/files/138/138-h/138-h.htm"}],"143.txt":[{"title":"The Project Gutenberg eBook of The Mayor of Casterbridge, by Thomas Hardy","link":"https://www.gutenberg.org/files/143/143-h/143-h.htm"}],"121.txt":[{"title":"The Project Gutenberg eBook of Northanger Abbey, by Jane Austen","link":"https://www.gutenberg.org/files/121/121-h/121-h.htm"}],"107.txt":[{"title":"The Project Gutenberg eBook of Far from the Madding Crowd, by Thomas Hardy","link":"https://www.gutenberg.org/files/107/107-h/107-h.htm"}],"126.txt":[{"title":"The Poison Belt","link":"https://www.gutenberg.org/files/126/126-h/126-h.htm"}],"134.txt":[{"title":"Maria, by Mary Wollstonecraft","link":"https://www.gutenberg.org/files/134/134-h/134-h.htm"}],"139.txt":[{"title":"The Project Gutenberg E-text of The Lost World, by Arthur Conan Doyle.","link":"https://www.gutenberg.org/files/139/139-h/139-h.htm"}],"140.txt":[{"title":"The Project Gutenberg eBook of The Jungle, by Upton Sinclair","link":"https://www.gutenberg.org/files/140/140-h/140-h.htm"}],"109.txt":[{"title":"The Project Gutenberg E-text of Renascence and Other Poems, by Edna St. Vincent Millay","link":"https://www.gutenberg.org/files/109/109-h/109-h.htm"}],"133.txt":[{"title":"The Damnation of Theron Ware, by Harold Frederic","link":"https://www.gutenberg.org/files/133/133-h/133-h.htm"}],"136.txt":[{"title":"The Project Gutenberg eBook of Les MisÃ©rables, by Victor Hugo","link":"https://www.gutenberg.org/files/136/136-h/136-h.htm"}],"118.txt":[{"title":"Beethoven's Fifth Symphony, in C-minor, Opus #67, by Ludwig van Beethoven","link":"https://www.gutenberg.org/files/118/118-h/118-h.htm"}],"122.txt":[{"title":"The Project Gutenberg eBook of The Return of the Native, by Thomas Hardy","link":"https://www.gutenberg.org/files/122/122-h/122-h.htm"}],"113.txt":[{"title":"The Project Gutenberg eBook of The Secret Garden, by Frances Hodgson Burnett","link":"https://www.gutenberg.org/files/113/113-h/113-h.htm"}]}
+                var results = {"Searching":[{
+                    "title": "",
+                    "link": ""
+                }]}
+
+                fetch(`${searchURL}/search?q=${query}`)
+                .then(response => response.json())
+                .then(results => {
+                    cont.innerHTML = `<label> ${text} </label>`
+                    container.appendChild(document.createElement('br'));
+                    for(doc in results) {
+                        var title = results[doc][0]["title"]
+                        var link = results[doc][0]["link"]
+                        generateResults(title, link)
+                    }
+                    document.getElementById('container').scrollIntoView(true);
+                    document.getElementById("loader").style.display = "none";
+                    document.getElementById("q").readOnly = false
+                })
+                .catch((err) => console.log(err));
+            }
+
+            document.getElementById("q")
+                .addEventListener("keyup", function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    document.getElementById("loader").style.display = "block";
+                    searchWords()
+                }
+            });
+
+            function generateResults(text, link) {
+                var a = document.createElement('a');
+                a.target = '_blank';
+                a.href = link;
+                a.innerText = text;
+            
+                var container = document.getElementById('container');
+                container.style = "padding-top:40px; height:100%;";
+
+                container.appendChild(a);
+                container.appendChild(document.createElement('br'));
+            }
+
+        </script>
+    </body>
+</html>
