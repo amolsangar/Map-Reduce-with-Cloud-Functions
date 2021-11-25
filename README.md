@@ -2,7 +2,9 @@
 
 The task is to design and implement a **parallel** Map-Reduce system using Google Cloud Functions (Functions as a Service)
 
-A simple text-search engine is implemented by computing an inverted index of a large text corpus using the general Map-Reduce design principle, and exposing a simple web-based search interface.
+A simple text-search engine is implemented by computing an inverted index of a large text corpus using the general Map-Reduce design principle, and exposing a simple web-based search interface. For this simple static site, Google Cloud Run is been used.
+
+The main objective is to demonstrate data-parallelism, synchronization, and cloud functions. 
 
 # Data Source
 - Files from Project Gutenberg
